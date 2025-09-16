@@ -14,7 +14,7 @@ public class JpaApplication {
 
 	//Executa assim que começar o programa
 	@Bean
-	CommandLineRunner run(PessoaRepository repo, EnderecoRepository ende) {
+	CommandLineRunner run(PessoaRepository repo, EnderecoRepository ende, CarroRepository carroRepository) {
 		return args -> {
 			// Inserções
 			//Id é nulo -> insere o registro ( insert )
@@ -35,8 +35,41 @@ public class JpaApplication {
 			ende.findAll().forEach(e->
 					System.out.println(e.getId()+ " -  " + e.getBairro() + " - " + e.getCidade() + " - " + e.getEstado() + " - " + e.getCep()));
 
+			carroRepository.deleteAll();
+			Carro carro = new Carro(null,"HB20","Hyundai",2025,2025,"branco");
+			carroRepository.save(carro);
+			carro = new Carro(null,"T-Cross","Volskwagen",2025,2024,"branco");
+			carroRepository.save(carro);
+			carro = new Carro(null,"Polo","Volskwagen",2022,2022,"vermelho");
+			carroRepository.save(carro);
+			carro = new Carro(null,"Onix","Chevrolet",2024,2024,"preto");
+			carroRepository.save(carro);
+			carro = new Carro(null,"Tracker","Chevrolet",2021,2020,"preto");
+			carroRepository.save(carro);
+			System.out.println("-------------------");
+			System.out.println(" TODOS OS CARROS");
+			System.out.println("-------------------");
+			for (Carro c : carroRepository.findAll()) {
+				System.out.println(c);
+			}
+			System.out.println("-------------------");
+			System.out.println(" TODOS OS CARROS PELA COR");
+			System.out.println("-------------------");
+			for (Carro c : carroRepository.findByCor("branco")) {
+				System.out.println(c);
+			}
+			System.out.println("-------------------");
+			System.out.println(" TODOS OS CARROS PELA MARCA");
+			System.out.println("-------------------");
+			for (Carro c : carroRepository.findByMarcaIgnoreCaseOrderByModeloDesc("chevrolet")) {
+				System.out.println(c);
+			}
+			System.out.println("-------------------");
+			System.out.println(" TODOS OS CARROS PELA MARCA LIKE");
+			System.out.println("-------------------");
+			for (Carro c : carroRepository.findByMarcaContaining("v")) {
+				System.out.println(c);
+			}
 		};
 	}
-
-
 }
